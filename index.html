@@ -56,6 +56,86 @@ body{
 .tool-tab[data-tool="crictl"].active{background:var(--cri)}
 .tool-tab[data-tool="nerdctl"].active{background:var(--nerd)}
 .tool-tab[data-tool="host"].active{background:var(--host)}
+.ai-open-btn{
+  padding:6px 13px;border-radius:999px;border:0;cursor:pointer;
+  font-size:12px;font-weight:700;color:#fff;white-space:nowrap;
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+  box-shadow:0 2px 10px rgba(99,102,241,.35);transition:.18s;
+}
+.ai-open-btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.ai-backdrop{
+  position:fixed;inset:0;background:rgba(15,23,42,.35);z-index:9000;
+  opacity:0;pointer-events:none;transition:opacity .22s;
+}
+.ai-backdrop.show{opacity:1;pointer-events:auto}
+.ai-drawer{
+  position:fixed;top:0;right:0;width:min(480px,100vw);height:100vh;z-index:9001;
+  background:var(--surface);display:flex;flex-direction:column;
+  box-shadow:-8px 0 32px rgba(15,23,42,.15);
+  transform:translateX(100%);transition:transform .28s ease;
+}
+.ai-drawer.open{transform:translateX(0)}
+.ai-drawer-head{
+  flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;border-bottom:1px solid var(--divider);
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;
+}
+.ai-drawer-head h2{font-size:15px;font-weight:700}
+.ai-drawer-close{
+  border:0;background:rgba(255,255,255,.2);color:#fff;width:32px;height:32px;
+  border-radius:8px;cursor:pointer;font-size:18px;line-height:1;
+}
+.ai-drawer-close:hover{background:rgba(255,255,255,.35)}
+.ai-drawer-body{flex:1;overflow-y:auto;padding:14px 16px 20px;display:flex;flex-direction:column;gap:12px}
+.ai-settings{
+  border-radius:10px;background:var(--surface-2);padding:10px 12px;
+  box-shadow:inset 0 0 0 1px var(--divider);font-size:12px;
+}
+.ai-settings summary{cursor:pointer;font-weight:600;color:var(--text);user-select:none}
+.ai-settings-grid{display:grid;gap:8px;margin-top:10px}
+.ai-settings-grid label{display:flex;flex-direction:column;gap:4px;color:var(--muted);font-size:11px}
+.ai-settings-grid input{
+  font-size:12px;padding:8px 10px;border-radius:8px;border:0;
+  background:#fff;box-shadow:inset 0 0 0 1px var(--divider);outline:0;
+}
+.ai-settings-grid input:focus{box-shadow:inset 0 0 0 1px rgba(99,102,241,.5),0 0 0 3px rgba(99,102,241,.12)}
+.ai-hint{font-size:11px;color:var(--dim);line-height:1.5}
+.ai-prompt label{display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px}
+.ai-prompt textarea{
+  width:100%;min-height:88px;resize:vertical;font-size:13px;line-height:1.5;
+  padding:10px 12px;border-radius:10px;border:0;font-family:var(--sans);
+  box-shadow:inset 0 0 0 1px var(--divider);outline:0;
+}
+.ai-prompt textarea:focus{box-shadow:inset 0 0 0 1px rgba(99,102,241,.45),0 0 0 3px rgba(99,102,241,.1)}
+.ai-actions{display:flex;gap:8px;flex-wrap:wrap}
+.ai-actions button{
+  padding:8px 16px;border-radius:8px;border:0;font-size:13px;font-weight:600;cursor:pointer;
+}
+.ai-generate{color:#fff;background:linear-gradient(135deg,#6366f1,#7c3aed)}
+.ai-generate:disabled{opacity:.55;cursor:not-allowed}
+.ai-clear{background:var(--surface-2);color:var(--muted);box-shadow:inset 0 0 0 1px var(--divider)}
+.ai-status{font-size:12px;color:var(--muted);min-height:18px}
+.ai-status.err{color:#dc2626}
+.ai-results{display:flex;flex-direction:column;gap:8px}
+.ai-result-card{
+  border-radius:10px;background:var(--surface);overflow:hidden;
+  box-shadow:inset 0 0 0 1px var(--divider);
+}
+.ai-result-head{
+  font-size:11px;color:var(--muted);padding:8px 12px;background:var(--surface-2);
+  border-bottom:1px solid var(--divider);
+}
+.ai-result-cmd{
+  font-family:var(--mono);font-size:12px;line-height:1.55;color:#0c4a6e;
+  padding:10px 12px;word-break:break-all;cursor:pointer;white-space:pre-wrap;
+}
+.ai-result-cmd:hover{background:var(--hover)}
+.ai-result-cmd.copied{background:#ecfdf5}
+.ai-examples{display:flex;flex-wrap:wrap;gap:6px}
+.ai-chip{
+  font-size:11px;padding:5px 10px;border-radius:999px;border:0;cursor:pointer;
+  background:var(--accent-bg);color:var(--accent);font-weight:500;
+}
 .workspace{
   flex:1;display:flex;min-height:0;overflow:hidden;width:100%;
   background:var(--surface);border-radius:var(--radius);
@@ -259,6 +339,7 @@ body{
     <input type="checkbox" id="copy-with-vars" checked>
     <span>复制带变量</span>
   </label>
+  <button type="button" class="ai-open-btn" id="ai-open-btn" title="用自然语言生成可复制命令">✦ AI 命令</button>
   <div class="tools" id="tool-tabs"></div>
 </header>
 <div class="workspace">
@@ -282,6 +363,43 @@ body{
 </div>
 </div>
 <div class="toast" id="toast">已复制</div>
+<div class="ai-backdrop" id="ai-backdrop" aria-hidden="true"></div>
+<aside class="ai-drawer" id="ai-drawer" aria-hidden="true">
+  <div class="ai-drawer-head">
+    <h2>AI 命令助手</h2>
+    <button type="button" class="ai-drawer-close" id="ai-drawer-close" aria-label="关闭">×</button>
+  </div>
+  <div class="ai-drawer-body">
+    <p class="ai-hint">描述场景即可生成命令。线上（GitHub Pages）请在下方填写<strong>你自己的</strong> DashScope Key 并保存，仅存本机浏览器；勿把 Key 写进仓库。本地开发可用 <code>ai-config.local.js</code>（见仓库 example）。</p>
+    <details class="ai-settings" id="ai-settings">
+      <summary>API 配置（DashScope 兼容 OpenAI）</summary>
+      <div class="ai-settings-grid">
+        <label>API 地址（到 /v1）
+          <input type="url" id="ai-api-url" placeholder="https://dashscope.aliyuncs.com/compatible-mode/v1" autocomplete="off">
+        </label>
+        <label>模型
+          <input type="text" id="ai-api-model" placeholder="deepseek-v4-pro" autocomplete="off">
+        </label>
+        <label>API Key
+          <input type="password" id="ai-api-key" placeholder="sk-..." autocomplete="off">
+        </label>
+      </div>
+      <button type="button" class="ai-clear" id="ai-save-config" style="margin-top:8px">保存配置到本机</button>
+    </details>
+    <div class="ai-prompt">
+      <label for="ai-user-input">你想要什么命令？</label>
+      <textarea id="ai-user-input" placeholder="例：Pod 一直 CrashLoopBackOff 怎么查；发布后用 kubectl 验证；磁盘满了怎么找大文件…"></textarea>
+    </div>
+    <div class="ai-examples" id="ai-examples"></div>
+    <div class="ai-actions">
+      <button type="button" class="ai-generate" id="ai-generate">生成命令</button>
+      <button type="button" class="ai-clear" id="ai-clear-input">清空输入</button>
+    </div>
+    <div class="ai-status" id="ai-status"></div>
+    <div class="ai-results" id="ai-results"></div>
+  </div>
+</aside>
+<script src="ai-config.local.js" onerror="void 0"></script>
 <script>
 // ---- DATA ----
 // Each item: [cmd, desc, colorClass?, badges?]
@@ -2208,6 +2326,211 @@ document.getElementById('side-bar-toggle').onclick=function(){
 };
 
 render();
+
+// ---- AI 命令助手（OpenAI 兼容接口）----
+const AI_LS = { key:'ops_cmd_ai_key', url:'ops_cmd_ai_url', model:'ops_cmd_ai_model' };
+const AI_DEFAULT = {
+  url:'https://dashscope.aliyuncs.com/compatible-mode/v1',
+  model:'deepseek-v4-pro'
+};
+const AI_SYSTEM = `你是资深 Linux / Kubernetes / Docker 运维工程师。用户用中文描述想要的运维场景，你只输出可直接在终端执行的命令。
+
+硬性规则：
+1. 每条可独立执行的命令放在一个 markdown 代码块中，语言标记 bash 或 shell
+2. 占位符统一：<ns> <name> <pod> <node> <port> <image> <host> <dir> <service> <bin> <archive>；kubectl 的 -n <ns> 放命令末尾
+3. 不要输出整段脚本文件；不要编造不存在的自定义脚本名
+4. 代码块外可用一行简短中文说明该命令用途；不要冗长教程
+5. 若需多条命令按执行顺序给出；危险操作（删除命名空间、强制删 Pod）须注明慎用`;
+
+const AI_EXAMPLES = [
+  'Pod CrashLoopBackOff 排查三连',
+  'Service 访问不了怎么查',
+  '节点磁盘满了怎么找大文件',
+  'docker 容器启动失败怎么看日志',
+  '批量查 TLS 证书是否快过期',
+];
+
+function loadAiConfig(){
+  const cfg = window.__OPS_AI_CONFIG__ || {};
+  return {
+    url: localStorage.getItem(AI_LS.url) || cfg.url || AI_DEFAULT.url,
+    model: localStorage.getItem(AI_LS.model) || cfg.model || AI_DEFAULT.model,
+    key: localStorage.getItem(AI_LS.key) || cfg.key || ''
+  };
+}
+
+function saveAiConfigFromForm(){
+  const url = document.getElementById('ai-api-url').value.trim();
+  const model = document.getElementById('ai-api-model').value.trim();
+  const key = document.getElementById('ai-api-key').value.trim();
+  if(url) localStorage.setItem(AI_LS.url, url);
+  if(model) localStorage.setItem(AI_LS.model, model);
+  if(key) localStorage.setItem(AI_LS.key, key);
+  showToast('API 配置已保存到本机浏览器');
+}
+
+function fillAiConfigForm(){
+  const c = loadAiConfig();
+  document.getElementById('ai-api-url').value = c.url;
+  document.getElementById('ai-api-model').value = c.model;
+  document.getElementById('ai-api-key').value = c.key;
+}
+
+function setAiStatus(msg, isErr){
+  const el = document.getElementById('ai-status');
+  el.textContent = msg || '';
+  el.classList.toggle('err', !!isErr);
+}
+
+function openAiDrawer(){
+  document.getElementById('ai-drawer').classList.add('open');
+  document.getElementById('ai-backdrop').classList.add('show');
+  document.getElementById('ai-drawer').setAttribute('aria-hidden','false');
+  fillAiConfigForm();
+}
+
+function closeAiDrawer(){
+  document.getElementById('ai-drawer').classList.remove('open');
+  document.getElementById('ai-backdrop').classList.remove('show');
+  document.getElementById('ai-drawer').setAttribute('aria-hidden','true');
+}
+
+let aiLastCommands = [];
+
+function extractCommandsFromMarkdown(text){
+  const cmds = [];
+  const re = /```(?:bash|sh|shell|console)?\s*\n?([\s\S]*?)```/gi;
+  let m;
+  while((m = re.exec(text))){
+    const block = m[1].trim();
+    if(block) cmds.push(block);
+  }
+  if(!cmds.length){
+    const lines = text.split('\n').map(l=>l.trim()).filter(l=>l && !l.startsWith('#') && !/^[\-*#]/.test(l));
+    if(lines.length && lines.some(l=>/^(kubectl|docker|systemctl|journalctl|crictl|ctr|nerdctl|ansible|curl|grep|ss |ls |find |tar )/.test(l))){
+      cmds.push(lines.join('\n'));
+    }
+  }
+  return cmds;
+}
+
+function renderAiResults(commands, rawNote){
+  aiLastCommands = commands.slice();
+  const box = document.getElementById('ai-results');
+  if(!commands.length){
+    box.innerHTML = `<div class="ai-result-card"><div class="ai-result-head">未解析到代码块，原文如下（可手动复制）</div><pre class="ai-result-cmd" style="white-space:pre-wrap">${escHtml(rawNote||'')}</pre></div>`;
+    box.querySelector('.ai-result-cmd')?.addEventListener('click', function(){
+      copyText(this.textContent, this);
+    });
+    return;
+  }
+  box.innerHTML = commands.map((cmd, i)=>`
+    <div class="ai-result-card">
+      <div class="ai-result-head">命令 ${i+1} · 点击复制</div>
+      <div class="ai-result-cmd" data-ai-idx="${i}">${formatCmdHtml(cmd,'')}</div>
+    </div>`).join('');
+  box.querySelectorAll('.ai-result-cmd').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const idx = parseInt(el.getAttribute('data-ai-idx'), 10);
+      const cmd = aiLastCommands[idx] || el.textContent;
+      copyText(textForCopy(cmd), el);
+    });
+  });
+}
+
+function escHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function copyText(text, el){
+  const done = ()=>{
+    showToast(copyWithVars ? '已复制（含变量）' : '已复制（已去掉变量）');
+    if(el){
+      el.classList.add('copied');
+      setTimeout(()=>el.classList.remove('copied'),800);
+    }
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(()=>fallbackCopy(text, done));
+  } else fallbackCopy(text, done);
+}
+
+async function generateAiCommands(){
+  const input = document.getElementById('ai-user-input').value.trim();
+  if(!input){ setAiStatus('请先描述你想要的命令场景', true); return; }
+  const cfg = loadAiConfig();
+  const key = document.getElementById('ai-api-key').value.trim() || cfg.key;
+  const url = (document.getElementById('ai-api-url').value.trim() || cfg.url).replace(/\/+$/,'');
+  const model = document.getElementById('ai-api-model').value.trim() || cfg.model;
+  if(!key){ setAiStatus('请先在 API 配置中填写 Key 并保存', true); return; }
+  saveAiConfigFromForm();
+
+  const btn = document.getElementById('ai-generate');
+  btn.disabled = true;
+  setAiStatus('正在请求大模型…');
+  document.getElementById('ai-results').innerHTML = '';
+
+  try{
+    const endpoint = url + '/chat/completions';
+    const res = await fetch(endpoint, {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization':'Bearer ' + key
+      },
+      body: JSON.stringify({
+        model,
+        temperature: 0.2,
+        messages:[
+          { role:'system', content: AI_SYSTEM },
+          { role:'user', content: input }
+        ]
+      })
+    });
+    const data = await res.json().catch(()=>({}));
+    if(!res.ok){
+      const errMsg = data.error?.message || data.message || res.statusText || ('HTTP ' + res.status);
+      throw new Error(errMsg);
+    }
+    const content = data.choices?.[0]?.message?.content || '';
+    if(!content) throw new Error('模型返回为空');
+    const cmds = extractCommandsFromMarkdown(content);
+    renderAiResults(cmds, content);
+    setAiStatus('已生成 ' + (cmds.length || 1) + ' 组命令，点击命令行复制');
+  }catch(e){
+    setAiStatus('请求失败：' + (e.message || e), true);
+  }finally{
+    btn.disabled = false;
+  }
+}
+
+(function initAiAssistant(){
+  document.getElementById('ai-open-btn').onclick = openAiDrawer;
+  document.getElementById('ai-drawer-close').onclick = closeAiDrawer;
+  document.getElementById('ai-backdrop').onclick = closeAiDrawer;
+  document.getElementById('ai-save-config').onclick = saveAiConfigFromForm;
+  document.getElementById('ai-generate').onclick = generateAiCommands;
+  document.getElementById('ai-clear-input').onclick = ()=>{
+    document.getElementById('ai-user-input').value = '';
+    setAiStatus('');
+  };
+  document.getElementById('ai-examples').innerHTML = AI_EXAMPLES.map(t=>
+    `<button type="button" class="ai-chip">${escHtml(t)}</button>`
+  ).join('');
+  document.getElementById('ai-examples').onclick = e=>{
+    const chip = e.target.closest('.ai-chip');
+    if(!chip) return;
+    document.getElementById('ai-user-input').value = chip.textContent;
+    document.getElementById('ai-user-input').focus();
+  };
+  document.getElementById('ai-user-input').addEventListener('keydown', e=>{
+    if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)){ e.preventDefault(); generateAiCommands(); }
+  });
+  fillAiConfigForm();
+  if(window.__OPS_AI_CONFIG__?.key && !localStorage.getItem(AI_LS.key)){
+    saveAiConfigFromForm();
+  }
+})();
 </script>
 </body>
 </html>
