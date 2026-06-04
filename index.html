@@ -6,13 +6,13 @@
 <title>运维命令速查</title>
 <style>
 :root{
-  --bg:#e8edf3;--surface:#fff;--surface-2:#f6f8fb;--hover:#f1f5f9;
-  --divider:rgba(15,23,42,.08);--text:#0f172a;--muted:#64748b;--dim:#94a3b8;
-  --accent:#2563eb;--accent-bg:rgba(37,99,235,.1);
+  --bg:#eef2f6;--surface:#fff;--surface-2:#f8fafc;--hover:#f1f5f9;
+  --divider:rgba(15,23,42,.09);--text:#0f172a;--muted:#64748b;--dim:#94a3b8;
+  --accent:#2563eb;--accent-bg:rgba(37,99,235,.09);
   --k8s:#326ce5;--ctr:#ea580c;--cri:#7c3aed;--nerd:#059669;--host:#0d9488;
   --mono:ui-monospace,'Cascadia Code','Consolas',monospace;
   --sans:system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif;
-  --side:272px;--header:56px;--subhead:44px;--gap:12px;--radius:14px;
+  --side:276px;--header:58px;--subhead:44px;--gap:12px;--radius:10px;
 }
 html,body{height:100%;width:100%}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -25,17 +25,17 @@ body{
   padding:0 var(--gap) var(--gap);gap:var(--gap);
 }
 .header{
-  flex-shrink:0;display:flex;align-items:center;gap:16px;
-  padding:0 4px 0 8px;height:var(--header);
+  flex-shrink:0;display:flex;align-items:center;gap:12px;
+  padding:8px 2px 4px;height:var(--header);
   background:transparent;
 }
 .brand{flex-shrink:0;min-width:0}
-.brand h1{font-size:17px;font-weight:700;letter-spacing:-.02em;white-space:nowrap}
+.brand h1{font-size:18px;font-weight:750;letter-spacing:0;white-space:nowrap}
 .brand p{font-size:11px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .search{
   flex:1;min-width:160px;display:flex;align-items:center;gap:8px;
-  background:var(--surface);border:0;border-radius:10px;
-  padding:0 14px;height:34px;
+  background:var(--surface);border:0;border-radius:8px;
+  padding:0 12px;height:36px;
   box-shadow:0 1px 2px rgba(15,23,42,.06),inset 0 0 0 1px var(--divider);
   transition:box-shadow .2s;
 }
@@ -44,25 +44,24 @@ body{
 .search input::placeholder{color:var(--dim)}
 .tools{display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
 .tool-tab{
-  padding:6px 13px;border-radius:999px;border:0;
+  padding:7px 12px;border-radius:8px;border:0;
   background:var(--surface);font-size:12px;font-weight:600;cursor:pointer;
   color:var(--muted);white-space:nowrap;transition:.18s;
   box-shadow:inset 0 0 0 1px var(--divider);
 }
 .tool-tab:hover{color:var(--text);background:#fff}
-.tool-tab.active{color:#fff;box-shadow:0 2px 10px rgba(15,23,42,.15)}
+.tool-tab.active{color:#fff;box-shadow:0 2px 8px rgba(15,23,42,.12)}
 .tool-tab[data-tool="k8s"].active{background:var(--k8s)}
 .tool-tab[data-tool="ctr"].active{background:var(--ctr)}
 .tool-tab[data-tool="crictl"].active{background:var(--cri)}
 .tool-tab[data-tool="nerdctl"].active{background:var(--nerd)}
 .tool-tab[data-tool="host"].active{background:var(--host)}
 .ai-open-btn{
-  padding:6px 13px;border-radius:999px;border:0;cursor:pointer;
-  font-size:12px;font-weight:700;color:#fff;white-space:nowrap;
-  background:linear-gradient(135deg,#6366f1,#8b5cf6);
-  box-shadow:0 2px 10px rgba(99,102,241,.35);transition:.18s;
+  padding:7px 12px;border-radius:8px;border:0;cursor:pointer;
+  font-size:12px;font-weight:700;color:#475569;white-space:nowrap;
+  background:var(--surface);box-shadow:inset 0 0 0 1px var(--divider);transition:.18s;
 }
-.ai-open-btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.ai-open-btn:hover{color:#4f46e5;background:#fff;transform:translateY(-1px)}
 .ai-backdrop{
   position:fixed;inset:0;background:rgba(15,23,42,.35);z-index:9000;
   opacity:0;pointer-events:none;transition:opacity .22s;
@@ -223,11 +222,11 @@ body{
 .workspace{
   flex:1;display:flex;min-height:0;overflow:hidden;width:100%;
   background:var(--surface);border-radius:var(--radius);
-  box-shadow:0 4px 24px rgba(15,23,42,.08),0 1px 2px rgba(15,23,42,.04);
+  box-shadow:0 10px 30px rgba(15,23,42,.08),0 1px 2px rgba(15,23,42,.04);
 }
 .sidebar{
   width:var(--side);flex-shrink:0;display:flex;flex-direction:column;
-  background:var(--surface-2);
+  background:#f8fafc;
   transition:width .22s ease;
 }
 .shell.side-collapsed .sidebar{width:0;overflow:hidden}
@@ -248,13 +247,13 @@ body{
   position:fixed;left:var(--gap);top:calc(var(--header) + var(--gap) * 2);z-index:20;
   background:var(--surface);box-shadow:0 2px 12px rgba(15,23,42,.12);
 }
-.side-nav{flex:1;overflow-y:auto;overflow-x:hidden;padding:10px 12px 16px}
+.side-nav{flex:1;overflow-y:auto;overflow-x:hidden;padding:8px 10px 14px}
 .side-nav::-webkit-scrollbar{width:5px}
 .side-nav::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
 .side-item{
   display:flex;align-items:center;gap:8px;width:100%;text-align:left;border:0;background:transparent;
-  font-family:var(--sans);font-size:13px;color:var(--muted);padding:8px 12px;
-  border-radius:8px;cursor:pointer;transition:background .12s,color .12s,border-color .12s;
+  font-family:var(--sans);font-size:13px;color:var(--muted);padding:7px 10px;
+  border-radius:7px;cursor:pointer;transition:background .12s,color .12s,border-color .12s;
 }
 .side-item::before{content:'';width:4px;height:4px;border-radius:50%;background:#cbd5e1;flex-shrink:0}
 .side-item:hover{background:var(--hover);color:var(--text)}
@@ -266,11 +265,11 @@ body{
 .side-item-all{font-weight:600}
 .side-item-all::before{display:none}
 .side-fold{
-  margin:5px 0;border-radius:10px;background:rgba(255,255,255,.7);
-  box-shadow:inset 0 0 0 1px var(--divider);overflow:hidden;
+  margin:2px 0 4px;border-radius:7px;background:transparent;
+  box-shadow:none;overflow:hidden;
 }
 .side-fold-head{display:flex;align-items:stretch;gap:0;transition:background .15s}
-.side-fold-head:hover{background:rgba(255,255,255,.95)}
+.side-fold-head:hover{background:rgba(255,255,255,.85)}
 .side-fold-head.active-parent{background:var(--accent-bg)}
 .side-fold-head.active-parent .side-fold-label{color:var(--accent);font-weight:700}
 .side-toggle{
@@ -290,14 +289,11 @@ body{
   background:rgba(15,23,42,.05);border-radius:10px;
   padding:2px 8px;margin:7px 10px 7px 0;font-variant-numeric:tabular-nums;
 }
-.side-children{
-  display:grid;grid-template-rows:1fr;transition:grid-template-rows .25s ease;
-  border-top:1px solid var(--divider);
-}
+.side-children{display:grid;grid-template-rows:1fr;transition:grid-template-rows .25s ease}
 .side-children.collapsed{grid-template-rows:0fr;border-top-color:transparent}
-.side-children-inner{overflow:hidden;padding:5px 8px 8px}
+.side-children-inner{overflow:hidden;padding:3px 0 6px 18px}
 .side-children .side-item{
-  font-size:12px;padding:7px 10px 7px 14px;margin:1px 0;color:var(--muted);
+  font-size:12px;padding:6px 9px 6px 12px;margin:1px 0;color:var(--muted);
   border-radius:6px;
 }
 .side-children .side-item::before{width:3px;height:3px}
@@ -311,7 +307,7 @@ body{
 }
 .panel-head{
   flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:12px;
-  height:var(--subhead);padding:0 22px;
+  height:var(--subhead);padding:0 20px;
   border-bottom:1px solid var(--divider);
   position:sticky;top:0;z-index:2;background:var(--surface);
 }
@@ -339,21 +335,21 @@ body{
 .search-tool-block:last-child{margin-bottom:0}
 .panel-head .count{
   font-size:12px;color:var(--muted);background:var(--surface-2);
-  padding:4px 12px;border-radius:20px;font-variant-numeric:tabular-nums;
+  padding:4px 10px;border-radius:8px;font-variant-numeric:tabular-nums;
   box-shadow:inset 0 0 0 1px var(--divider);
 }
-.panel-body{flex:1;overflow-y:auto;padding:18px 22px 28px;background:var(--surface-2)}
+.panel-body{flex:1;overflow-y:auto;padding:14px 18px 24px;background:var(--surface-2)}
 .panel-body::-webkit-scrollbar{width:8px}
 .panel-body::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
 .card{
-  border:0;border-radius:12px;margin-bottom:12px;
+  border:0;border-radius:8px;margin-bottom:10px;
   overflow:hidden;background:var(--surface);
-  box-shadow:0 1px 3px rgba(15,23,42,.06),inset 0 0 0 1px var(--divider);
+  box-shadow:0 1px 2px rgba(15,23,42,.04),inset 0 0 0 1px var(--divider);
 }
 .card:last-child{margin-bottom:0}
 .sec-title{
-  font-size:12px;font-weight:600;color:var(--muted);
-  padding:9px 16px;background:transparent;border-bottom:1px solid var(--divider);
+  font-size:12px;font-weight:700;color:#334155;
+  padding:8px 14px;background:#fbfdff;border-bottom:1px solid var(--divider);
 }
 .sub-title{font-size:11px;font-weight:600;color:var(--accent);padding:14px 16px 4px;letter-spacing:.02em}
 .routine-banner{
@@ -364,22 +360,33 @@ body{
 .routine-banner:first-child{margin-top:0}
 .cmd-row{
   display:grid;grid-template-columns:minmax(320px,1.35fr) minmax(220px,1fr);
-  gap:18px;padding:10px 16px;border-bottom:1px solid var(--divider);
+  gap:16px;padding:9px 14px;border-bottom:1px solid var(--divider);
   cursor:pointer;transition:background .15s,box-shadow .15s;user-select:none;
 }
 .cmd-row:last-child{border-bottom:none}
 .cmd-row:hover{background:var(--hover);box-shadow:inset 3px 0 0 var(--accent)}
 .cmd-row.row-copied{background:#ecfdf5;box-shadow:inset 3px 0 0 #22c55e}
 .cmd{
-  font-size:12.5px;font-family:var(--mono);line-height:1.55;color:#0c4a6e;
-  word-break:break-all;padding:8px 10px;background:var(--surface-2);border-radius:8px;
+  font-size:12.5px;font-family:var(--mono);line-height:1.55;color:#0f3f5f;
+  word-break:break-all;padding:7px 9px;background:#f8fafc;border-radius:7px;
   box-shadow:inset 0 0 0 1px rgba(15,23,42,.06);
 }
 .cmd.ctr-c{color:#9a3412;background:#fff7ed;border-color:#fed7aa}
 .cmd.crictl-c{color:#5b21b6;background:#faf5ff;border-color:#e9d5ff}
 .cmd.nerd-c{color:#065f46;background:#ecfdf5;border-color:#a7f3d0}
 .var-ph{color:#1d4ed8;font-weight:600;background:rgba(37,99,235,.12);padding:1px 5px;border-radius:4px}
-.desc{font-size:13px;color:var(--muted);line-height:1.65;padding-top:8px;pointer-events:none;letter-spacing:.01em}
+.desc{font-size:13px;color:var(--muted);line-height:1.55;padding-top:6px;pointer-events:none;letter-spacing:0}
+.cmd-meta{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;min-width:0}
+.cmd-copy-tip{
+  flex-shrink:0;opacity:0;color:var(--accent);background:rgba(37,99,235,.08);
+  border-radius:6px;padding:4px 7px;margin-top:3px;font-size:11px;font-weight:700;
+  transition:opacity .15s;
+}
+.cmd-row:hover .cmd-copy-tip{opacity:1}
+.risk-tag{
+  display:inline-flex;align-items:center;margin-left:8px;padding:2px 6px;border-radius:999px;
+  font-size:10px;font-weight:700;color:#b91c1c;background:#fee2e2;vertical-align:1px;
+}
 .toast{
   position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(12px);
   background:#0f172a;color:#fff;padding:11px 22px;border-radius:10px;font-size:13px;
@@ -417,7 +424,7 @@ body{
   </div>
   <div class="search">
     <span aria-hidden="true">⌕</span>
-    <input type="text" id="search" placeholder="全局搜索（跨 Tab / 大类 / 子类）…" oninput="filter()" autocomplete="off">
+    <input type="text" id="search" placeholder="搜索命令、场景、资源类型（/ 聚焦，Esc 清空）" oninput="filter()" autocomplete="off">
   </div>
   <label class="copy-var-toggle on" id="copy-var-toggle" title="关闭后复制会去掉 &lt;name&gt;、&lt;ns&gt;、&lt;image&gt; 等占位符">
     <input type="checkbox" id="copy-with-vars" checked>
@@ -430,7 +437,7 @@ body{
   <aside class="sidebar">
     <div class="side-top">
       <span>分类</span>
-      <span class="side-top-hint">子类默认展开</span>
+      <span class="side-top-hint">当前分类展开</span>
       <button type="button" class="side-bar-toggle" id="side-bar-toggle" title="收起/展开侧栏" aria-label="收起侧栏">‹</button>
     </div>
     <nav class="side-nav" id="side-menu"></nav>
@@ -530,13 +537,13 @@ const tools = {
     ],
     "Namespace":[
       ["kubectl get ns","列出 ns（当前或指定命名空间）"],
-      ["kubectl create ns <name> -n <ns>","创建 ns 资源"],
-      ["kubectl delete ns <name> -n <ns>","删除命名空间及其下全部资源（不可恢复）"],
-      ["kubectl describe ns <name> -n <ns>","查看命名空间状态、配额与事件"],
+      ["kubectl create ns <name>","创建命名空间"],
+      ["kubectl delete ns <name>","删除命名空间及其下全部资源（不可恢复）"],
+      ["kubectl describe ns <name>","查看命名空间状态、配额与事件"],
       ["kubectl get quota -n <ns>","列出 quota（当前或指定命名空间）"],
       ["kubectl get limitrange -n <ns>","查看 LimitRange 对 Pod 默认/request/limit 约束"],
       ["kubectl get resourcequota","查看 ResourceQuota 配额与已用量"],
-      ["kubectl label ns <name> key=val -n <ns>","为命名空间添加或修改标签"],
+      ["kubectl label ns <name> key=val","为命名空间添加或修改标签"],
       ["kubectl get ns <name> -o json | jq '.spec={\"finalizers\":[]}' | kubectl replace --raw \"/api/v1/namespaces/<name>/finalize\" -f -","导出 ns 为 YAML/JSON 清单"],
     ],
     "Pod":[
@@ -2186,12 +2193,12 @@ function sideItemActive(cat, sub){
 
 function foldKey(cat){ return activeTool+':'+cat; }
 
-/** foldState[k]===true 表示折叠；false 表示强制展开；未设置时子级默认全部展开 */
+/** foldState[k]===true 表示折叠；false 表示强制展开；未设置时只有当前分类展开 */
 function isGroupExpanded(cat){
   const k=foldKey(cat);
   if(foldState[k]===true) return false;
   if(foldState[k]===false) return true;
-  return true;
+  return activeCat===cat;
 }
 
 function renderSideMenu(){
@@ -2251,6 +2258,13 @@ function renderSideMenu(){
 function setTool(k){ activeTool=k; activeCat="全部"; activeSubCat="全部"; render(); }
 function filter(){ searchQ=document.getElementById('search').value.trim(); render(); }
 
+function clearSearch(){
+  const input=document.getElementById('search');
+  searchQ='';
+  if(input) input.value='';
+  render();
+}
+
 function isGroupedCat(v){ return v && !Array.isArray(v) && typeof v === 'object'; }
 
 function catSections(catValue){
@@ -2269,6 +2283,10 @@ function showToast(msg){
   el.classList.add('show');
   clearTimeout(showToast._t);
   showToast._t=setTimeout(()=>el.classList.remove('show'),1600);
+}
+
+function isRiskCommand(cmd, desc){
+  return /(--force|delete|rm |prune|vacuum|finalize|强制|删除|清理|高危|慎用|不可恢复)/i.test(`${cmd} ${desc}`);
 }
 
 function copyCmd(cmd, rowEl){
@@ -2294,8 +2312,8 @@ function fallbackCopy(text,done){
 }
 
 function formatCmdHtml(cmd, q){
-  return cmd.split(/(<[a-zA-Z0-9_]+>)/g).map(part=>{
-    if(/^<[a-zA-Z0-9_]+>$/.test(part))
+  return cmd.split(/(<[^<>\s]+>)/g).map(part=>{
+    if(/^<[^<>\s]+>$/.test(part))
       return `<span class="var-ph">${part.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>`;
     return hl(part,q);
   }).join('');
@@ -2314,9 +2332,13 @@ function renderRows(items, q, toolKey){
       return `<div class="${bannerCls}">${hl(desc,q)}</div>`;
     }
     const attr=escAttr(cmd);
+    const risk=isRiskCommand(cmd, desc);
     return `<div class="cmd-row" data-copy="${attr}" title="点击复制">
       <code class="cmd ${cc||''}">${formatCmdHtml(cmd,q)}</code>
-      <div class="desc">${hl(desc,q)}</div>
+      <div class="cmd-meta">
+        <div class="desc">${hl(desc,q)}${risk?'<span class="risk-tag">慎用</span>':''}</div>
+        <span class="cmd-copy-tip" aria-hidden="true">复制</span>
+      </div>
     </div>`;
   }).join('');
 }
@@ -2388,6 +2410,27 @@ document.getElementById('content').addEventListener('click',e=>{
   const cmd=row.getAttribute('data-copy');
   if(!cmd) return;
   copyCmd(cmd, row);
+});
+
+document.addEventListener('keydown', e=>{
+  const tag=(e.target && e.target.tagName || '').toLowerCase();
+  const isTyping=tag==='input' || tag==='textarea';
+  if(e.key==='/' && !isTyping){
+    e.preventDefault();
+    document.getElementById('search')?.focus();
+    return;
+  }
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='k'){
+    e.preventDefault();
+    document.getElementById('search')?.focus();
+    document.getElementById('search')?.select();
+    return;
+  }
+  if(e.key==='Escape' && document.activeElement?.id==='search'){
+    e.preventDefault();
+    clearSearch();
+    document.getElementById('search')?.blur();
+  }
 });
 
 (function initCopyVarToggle(){
